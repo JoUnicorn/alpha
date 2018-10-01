@@ -14,4 +14,4 @@ data = {
 response = requests.get(API_URL, params=data).json()
 
 def stock(request):
-    return render(request, 'visualization/stock.html', {'date': datetime.now()})
+    return render(request, 'visualization/stock.html', {'date': datetime.now(), 'stocks': response['Time Series (Daily)']})
