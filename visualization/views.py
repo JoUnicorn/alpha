@@ -1,8 +1,17 @@
-from django.http import HttpResponse
+from datetime import datetime
 from django.shortcuts import render
+import requests
+import json
 
-def home(request):
-    """ Exemple de page non valide au niveau HTML pour que l'exemple soit concis """
-    return HttpResponse("""
-        <h1>Data visualization !</h1>
-    """)
+API_URL = "https://www.alphavantage.co/query"
+
+data = {
+    "function": "TIME_SERIES_DAILY",
+    "symbol": "MSFT",
+    "apikey": "Q5I0WW1DQE5CBEQH",
+}
+
+response = requests.get(API_URL, params=data).json()
+
+def stock(request):
+    return render(request, 'visualization/stock.html', {'date': datetime.now()})
