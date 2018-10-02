@@ -1,22 +1,27 @@
-<h1>Data visualization !</h1>
-<p>La date actuelle est : {{ date }}</p>
+{% extends "base.html" %}
+{% block title %}Ma page d'accueil{% endblock %}
+{% block content %}
+  <h1>Data visualization !</h1>
+  <p>La date actuelle est : {{ date }}</p>
 
-<table>
-    <tr>
-        <td>date</td>
-        <td>open</td>
-        <td>high</td>
-        <td>low</td>
-        <td>close</td>
-        <td>volume</td>
-    </tr>
+  <table>
+      <tr>
+          <td>date</td>
+          <td>open</td>
+          <td>high</td>
+          <td>low</td>
+          <td>close</td>
+          <td>volume</td>
+      </tr>
 
-    {% for key, values in stocks.items %}
-    <tr>
-        <td>{{key}}</td>
-        {% for v, w in values.items %}
-        <td>{{w}}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
+      {% for key, values in stocks.items %}
+      <tr>
+          <td>{{key}}</td>
+          {% for v, w in values.items %}
+          <td>{{w}}</td>
+          {% endfor %}
+      </tr>
+      {% endfor %}
+  </table>
+
+{% endblock %}
