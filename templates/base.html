@@ -1,23 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-   <link rel="stylesheet" href="/media/css/style.css" />
-   <title>{% block title %}Mon blog sur les crêpes bretonnes{% endblock %}</title>
-</head>
-<body>
-<header>Crêpes bretonnes</header>
-    <nav>
-       {% block nav %}
-       <ul>
+<html class="no-js" lang="en">
+  <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'css/foundation.css' %}" />
+      <title>{% block title %}Alpha{% endblock %}</title>
+  </head>
+  <body>
+    <header>Alpha</header>
+      <nav>
+         {% block nav %}
+         <ul>
             <li><a href="/">Accueil</a></li>
             <li><a href="/blog/">Blog</a></li>
             <li><a href="/contact/">Contact</a></li>
-       </ul>
-       {% endblock %}
-   </nav>
-   <section id="content">
-       {% block content %}{% endblock %}
-   </section>
-<footer>&copy; Crêpes bretonnes</footer>
-</body>
+         </ul>
+         {% endblock %}
+      </nav>
+      <section id="content">
+         {% block content %}{% endblock %}
+      </section>
+    <footer>&copy; Alpha</footer>
+    <script src="{% static 'js/vendor/foundation.min.js' %}"></script>
+  </body>
 </html>
