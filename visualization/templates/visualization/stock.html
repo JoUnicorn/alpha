@@ -6,8 +6,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6">
-                <div class="card">
-                    <h5 class="card-header">
+                <div class="card border-9">
+                    <h5 class="card-header" style="background-color:#DCDCDC;">
                         <ul class="nav nav-pills card-header-pills">
                           <li class="nav-item">
                             <a class="nav-link active" href="#">Watchlists</a>
@@ -15,18 +15,37 @@
                           <li class="nav-item">
                             <a class="nav-link" href="#">Alerts</a>
                           </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="#">{{date}}</a>
+                          </li>
                         </ul>
                     </h5>
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <div class="card-body scrollV">
+                        <table>
+                            <tr>
+                                <td>date</td>
+                                <td>open</td>
+                                <td>high</td>
+                                <td>low</td>
+                                <td>close</td>
+                                <td>volume</td>
+                            </tr>
+
+                            {% for key, values in stocks.items %}
+                            <tr>
+                                <td>{{key}}</td>
+                                {% for v, w in values.items %}
+                                <td>{{w}}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="card">
-                    <h5 class="card-header">
+                <div class="card border-9">
+                    <h5 class="card-header" style="background-color:#DCDCDC;">
                         <ul class="nav nav-pills card-header-pills">
                           <li class="nav-item">
                             <a class="nav-link active" href="#">Watchlists</a>
@@ -37,36 +56,12 @@
                         </ul>
                     </h5>
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-  <h1>Data visualization !</h1>
-  <p>La date actuelle est : {{ date }}</p>
-
-  <table>
-      <tr>
-          <td>date</td>
-          <td>open</td>
-          <td>high</td>
-          <td>low</td>
-          <td>close</td>
-          <td>volume</td>
-      </tr>
-
-      {% for key, values in stocks.items %}
-      <tr>
-          <td>{{key}}</td>
-          {% for v, w in values.items %}
-          <td>{{w}}</td>
-          {% endfor %}
-      </tr>
-      {% endfor %}
-  </table>
 
 {% endblock %}
