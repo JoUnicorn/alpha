@@ -5,35 +5,11 @@
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       {% load static %}
-      <link rel="stylesheet" href="{% static 'css/foundation.css' %}" />
-      <link rel="stylesheet" href="{% static 'css/app.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
       <title>{% block title %}Alpha{% endblock %}</title>
   </head>
   <body>
     {% block nav %}
-    <nav class="top-bar topbar-responsive">
-      <div class="top-bar-title">
-        <span data-responsive-toggle="topbar-responsive" data-hide-for="medium">
-          <button class="menu-icon" type="button" data-toggle></button>
-        </span>
-        <a class="topbar-responsive-logo" href="#"><strong>Alpha</strong></a>
-      </div>
-      <div id="topbar-responsive" class="topbar-responsive-links">
-        <div class="top-bar-right">
-          <ul class="menu simple vertical medium-horizontal">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Works</a></li>
-            <li><a href="#">News</a></li>
-            <li><a href="#">Contact</a></li>
-            <li>
-              <button type="button" class="button hollow topbar-responsive-button">Categories</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
     {% endblock %}
 
 
@@ -41,11 +17,8 @@
        {% block content %}{% endblock %}
     </section>
     <footer>&copy; Alpha</footer>
-    <script src="{% static 'js/vendor/jquery.js' %}"></script>
-    <script src="{% static 'js/vendor/what-input.js' %}"></script>
-    <script src="{% static 'js/vendor/foundation.min.js' %}"></script>
-    <script>
-      $(document).foundation();
-    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
     </body>
 </html>
