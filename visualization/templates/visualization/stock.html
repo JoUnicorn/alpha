@@ -20,7 +20,21 @@
                           </li>
                         </ul>
                     </h5>
-                    <div class="card-body scrollV">
+                    <div class="card-body">
+                      <div class="container">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="input-group mb-3">
+                              <input type="text" class="form-control" placeholder="Stock's symbol" aria-label="Stock's symbol" aria-describedby="button-addon2">
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="container scrollV">
                         <table>
                             <tr>
                                 <td>date</td>
@@ -40,6 +54,7 @@
                             </tr>
                             {% endfor %}
                         </table>
+                      </div>
                     </div>
                 </div>
             </div>
