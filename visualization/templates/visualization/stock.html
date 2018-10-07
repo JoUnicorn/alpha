@@ -40,14 +40,15 @@
                       </div>
                       <hr>
                       <div class="container scrollV">
-                        <table id="data_symb">
+                        <table id="info_symbol">
                             <tr>
-                                <td>date</td>
-                                <td>open</td>
-                                <td>high</td>
-                                <td>low</td>
-                                <td>close</td>
-                                <td>volume</td>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Region</th>
+                                <th>Exchange open time</th>
+                                <th>Exchange close time</th>
+                                <th>Currency</th>
                             </tr>
 
                         </table>
@@ -68,6 +69,22 @@
                         </ul>
                     </h5>
                     <div class="card-body">
+                        <div class="container scrollV">
+                          <table id="data_symb">
+                              <thead>
+                                  <tr>
+                                      <th>date</th>
+                                      <th>open</th>
+                                      <th>high</th>
+                                      <th>low</th>
+                                      <th>close</th>
+                                      <th>volume</th>
+                                  </tr>
+                              </thead>
+                                <tbody>
+                                </tbody>
+                          </table>
+                        </div>
 
                     </div>
                 </div>
@@ -138,7 +155,16 @@
 
         $('.js-data-symbol-ajax').on('select2:select', function (e) {
             var data = e.params.data;
-            console.log(data);
+            $('#info_symbol').append('<tr></tr>');
+            var appendRow = $('#info_symbol tr:last');
+            appendRow.append('<td>' + data['1. symbol'] + '</td>');
+            appendRow.append('<td>' + data['2. name'] + '</td>');
+            appendRow.append('<td>' + data['3. type'] + '</td>');
+            appendRow.append('<td>' + data['4. region'] + '</td>');
+            appendRow.append('<td>' + data['5. marketOpen'] + '</td>');
+            appendRow.append('<td>' + data['6. marketClose'] + '</td>');
+            appendRow.append('<td>' + data['8. currency'] + '</td>');
+            $("#data_symb tbody tr").remove();
             $.ajax({
                   url: "return_s_data/",
                   dataType: 'json',
@@ -147,7 +173,7 @@
                   },
                   success: function (data) {
                       $.each(data, function(index, element) {
-                            $('#data_symb').append('<tr></tr>');
+                            $('#data_symb > tbody').append('<tr></tr>');
                             var appendRow = $('#data_symb tr:last');
                             appendRow.append('<td>' + index + '</td>');
                             $.each(element, function(index2, element2) {
@@ -156,6 +182,7 @@
                       });
                   }
             });
+
         });
 
     });
