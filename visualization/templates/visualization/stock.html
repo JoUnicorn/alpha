@@ -24,18 +24,23 @@
                       <div class="container">
                         <div class="row">
                           <div class="col-sm-6">
+
                             <div class="input-group mb-3">
-                              <input type="text" class="form-control" placeholder="Stock's symbol" aria-label="Stock's symbol" aria-describedby="button-addon2">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
-                              </div>
+                                <select class="js-data-symbol-ajax" style="width:100%">
+                                </select>
+
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
+                                </div>
                             </div>
+
+
                           </div>
                         </div>
                       </div>
                       <hr>
                       <div class="container scrollV">
-                        <table>
+                        <table id="data_symb">
                             <tr>
                                 <td>date</td>
                                 <td>open</td>
@@ -45,14 +50,6 @@
                                 <td>volume</td>
                             </tr>
 
-                            {% for key, values in stocks.items %}
-                            <tr>
-                                <td>{{key}}</td>
-                                {% for v, w in values.items %}
-                                <td>{{w}}</td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
                         </table>
                       </div>
                     </div>
@@ -79,4 +76,88 @@
     </div>
 
 
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    $(document).ready(function(){
+        $(".js-data-symbol-ajax").select2({
+            theme: "classic",
+          ajax: {
+            url: "search_s/",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+              return {
+                'symbol': params.term // search term
+              };
+            },
+            processResults: function (data, params) {
+                var data1 = $.map(data.bestMatches, function(obj, idx) {
+                  obj.id = obj['1. symbol'] || idx;
+                  return obj;
+                });
+              return {
+                results: data1,
+              };
+            },
+            cache: true
+          },
+          placeholder: 'Search for a symbol',
+          escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+          minimumInputLength: 1,
+          templateResult: formatRepo,
+          templateSelection: formatRepoSelection
+        });
+
+        function formatRepo (repo) {
+          if (repo.loading) {
+            return repo.text;
+          }
+
+          var markup = "<div class='select2-result-repository clearfix'>" +
+              "<div class='select2-result-repository__title'>" + repo['1. symbol'] + "</div>";
+
+          if (repo['2. name']) {
+            markup += "<div class='select2-result-repository__description'>" + repo['2. name'] + "</div>";
+          }
+
+          markup += "<div class='select2-result-repository__statistics'>" +
+            "<div class='select2-result-repository__forks'>Market open:  " + repo['5. marketOpen'] + " </div>" +
+            "<div class='select2-result-repository__stargazers'>Market close: " + repo['6. marketClose'] + " </div>" +
+            "<div class='select2-result-repository__watchers'>Currency: " + repo['8. currency'] + " </div>" +
+          "</div>" +
+          "</div>";
+
+          return markup;
+        }
+
+        function formatRepoSelection (repo) {
+          return repo['1. symbol'] || repo.text;
+        }
+
+        $('.js-data-symbol-ajax').on('select2:select', function (e) {
+            var data = e.params.data;
+            console.log(data);
+            $.ajax({
+                  url: "return_s_data/",
+                  dataType: 'json',
+                  data: {
+                      'symbol': data['1. symbol'] // search term
+                  },
+                  success: function (data) {
+                      $.each(data, function(index, element) {
+                            $('#data_symb').append('<tr></tr>');
+                            var appendRow = $('#data_symb tr:last');
+                            appendRow.append('<td>' + index + '</td>');
+                            $.each(element, function(index2, element2) {
+                                appendRow.append('<td>' + element2 + '</td>');
+                            });
+                      });
+                  }
+            });
+        });
+
+    });
+  </script>
 {% endblock %}
