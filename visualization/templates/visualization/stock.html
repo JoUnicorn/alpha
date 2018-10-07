@@ -85,6 +85,11 @@
                                 </tbody>
                           </table>
                         </div>
+                        <hr>
+                        <div class="container scrollV">
+
+                            <div id="main" style="width: 600px;height:400px;"></div>
+                        </div>
 
                     </div>
                 </div>
@@ -155,6 +160,8 @@
 
         $('.js-data-symbol-ajax').on('select2:select', function (e) {
             var data = e.params.data;
+            var xA=[];
+            var yA=[];
             $('#info_symbol').append('<tr></tr>');
             var appendRow = $('#info_symbol tr:last');
             appendRow.append('<td>' + data['1. symbol'] + '</td>');
@@ -176,14 +183,108 @@
                             $('#data_symb > tbody').append('<tr></tr>');
                             var appendRow = $('#data_symb tr:last');
                             appendRow.append('<td>' + index + '</td>');
+                            xA.unshift(index);
+                            yA.unshift(element['1. open']);
                             $.each(element, function(index2, element2) {
                                 appendRow.append('<td>' + element2 + '</td>');
                             });
                       });
+                      // based on prepared DOM, initialize echarts instance
+                      var myChart = echarts.init(document.getElementById('main'));
+
+                      // specify chart configuration item and data
+                      option = {
+                          tooltip: {
+                              trigger: 'axis',
+                              axisPointer: {
+                                  animation: false
+                              }
+                          },
+                          axisPointer: {
+                              link: {xAxisIndex: 'all'}
+                          },
+                          dataZoom: [
+                              {
+                                  id: 'dataZoomX',
+                                 type: 'slider',
+                                 filterMode: 'filter',
+                                 start: 20,
+                                 end: 80
+                              }
+                          ],
+                          xAxis: {
+                              type: 'category',
+                              data: xA
+                          },
+                          yAxis: {
+                              type: 'value',
+                              min: 'dataMin'
+                          },
+                          series: [{
+                              data: yA,
+                              type: 'line'
+                          }]
+                      };
+
+                      // use configuration item and data specified to show chart
+                      myChart.setOption(option)
+
                   }
             });
 
         });
+
+
+/*        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    animation: false
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            axisPointer: {
+                link: {xAxisIndex: 'all'}
+            },
+            dataZoom: [
+                {
+                    show: true,
+                    realtime: true,
+                    start: 30,
+                    end: 70,
+                    xAxisIndex: [0, 1]
+                }
+            ],
+            grid: [{
+                left: 50,
+                right: 50,
+                height: '35%'
+            }],
+            xAxis: {
+                type: 'category',
+                data: xA
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                symbolSize: 8,
+                hoverAnimation: false,
+                data: yA,
+                type: 'line'
+            }]
+        };
+*/
+
+
 
     });
   </script>
