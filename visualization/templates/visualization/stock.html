@@ -115,7 +115,7 @@
               };
             },
             processResults: function (data, params) {
-                var data1 = $.map(data.bestMatches, function(obj, idx) {
+                var data1 = $.map(data.data, function(obj, idx) {
                   obj.id = obj['1. symbol'] || idx;
                   return obj;
                 });
@@ -145,9 +145,10 @@
           }
 
           markup += "<div class='select2-result-repository__statistics'>" +
-            "<div class='select2-result-repository__forks'>Market open:  " + repo['5. marketOpen'] + " </div>" +
-            "<div class='select2-result-repository__stargazers'>Market close: " + repo['6. marketClose'] + " </div>" +
-            "<div class='select2-result-repository__watchers'>Currency: " + repo['8. currency'] + " </div>" +
+            "<div class='select2-result-repository__forks'>Sector:  " + repo['sector'] + " </div>" +
+            "<div class='select2-result-repository__stargazers'>Industry: " + repo['industry'] + " </div>" +
+            "<div class='select2-result-repository__forks'>Exchange:  " + repo['exchange'] + " </div>" +
+            "<div class='select2-result-repository__stargazers'>IPO year: " + repo['ipo'] + " </div>" +
           "</div>" +
           "</div>";
 
