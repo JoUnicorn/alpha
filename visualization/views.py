@@ -1,8 +1,9 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import requests
 import json
 from django.http import JsonResponse
+from .models import Category_sector, Category_industry, Stock
 
 API_URL = "https://www.alphavantage.co/query"
 
@@ -18,6 +19,7 @@ def search_s(request):
     }
 
     response = requests.get(API_URL, params=data).json()
+    print(get_object_or_404(Stock, id=5))
 
     return JsonResponse(response)
 
