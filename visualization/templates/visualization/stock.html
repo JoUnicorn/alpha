@@ -44,11 +44,10 @@
                             <tr>
                                 <th>Symbol</th>
                                 <th>Name</th>
-                                <th>Type</th>
-                                <th>Region</th>
-                                <th>Exchange open time</th>
-                                <th>Exchange close time</th>
-                                <th>Currency</th>
+                                <th>Sector</th>
+                                <th>Industry</th>
+                                <th>Exchange</th>
+                                <th>Ipo year</th>
                             </tr>
 
                         </table>
@@ -167,11 +166,10 @@
             var appendRow = $('#info_symbol tr:last');
             appendRow.append('<td>' + data['1. symbol'] + '</td>');
             appendRow.append('<td>' + data['2. name'] + '</td>');
-            appendRow.append('<td>' + data['3. type'] + '</td>');
-            appendRow.append('<td>' + data['4. region'] + '</td>');
-            appendRow.append('<td>' + data['5. marketOpen'] + '</td>');
-            appendRow.append('<td>' + data['6. marketClose'] + '</td>');
-            appendRow.append('<td>' + data['8. currency'] + '</td>');
+            appendRow.append('<td>' + data['sector'] + '</td>');
+            appendRow.append('<td>' + data['industry'] + '</td>');
+            appendRow.append('<td>' + data['exchange'] + '</td>');
+            appendRow.append('<td>' + data['ipo'] + '</td>');
             $("#data_symb tbody tr").remove();
             $.ajax({
                   url: "return_s_data/",
