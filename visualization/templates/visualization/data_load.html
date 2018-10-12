@@ -4,9 +4,17 @@
 {% block content %}
 
     <div class="container-fluid">
-      <h1> Load data </h1>
+      <h1> Load all data </h1>
       <p><button type="button" class="btn btn-primary" id="load">Load</button></p>
       <p id="result"></p>
+      <h1> Load 1 symbol </h1>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-secondary" type="button" id="load1">Add</button>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" id="symbol">
+      </div>
+      <p id="result2"></p>
     </div>
 
 
@@ -21,7 +29,7 @@
           url: "load_data/",
           dataType: 'json',
           data: {
-              'symbol': 'JO' // search term
+              'symbol': 'XXXX8888' // search term
           },
           success: function (data) {
             $('#result').text(data.status);
@@ -29,6 +37,27 @@
     });
 
   });
+
+  $('#load1').on('click', function(event) {
+    event.preventDefault(); // To prevent following the link (optional)
+    if($('#symbol').val() !=""){
+      $.ajax({
+            url: "load_data/",
+            dataType: 'json',
+            data: {
+                'symbol': $('#symbol').val() // search term
+            },
+            success: function (data) {
+              $('#result2').text(data.status);
+            }
+      });
+
+    }else{
+      alert("input a symbol")
+    }
+
+  });
+
 </script>
 
 {% endblock %}
