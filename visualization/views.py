@@ -9,7 +9,10 @@ from django.core import serializers
 API_URL = "https://www.alphavantage.co/query"
 
 def stock(request):
-    return render(request, 'visualization/stock.html', {'date': datetime.now()})
+    return render(request, 'visualization/stock.html', {'date': datetime.now(), 'vue': 'stock'})
+
+def data(request):
+    return render(request, 'visualization/data.html', {'date': datetime.now(), 'vue': 'data'})
 
 def search_s(request):
     symbol = request.GET['symbol']
@@ -50,35 +53,46 @@ def return_s_data(request):
         for key, val in response['Time Series (Daily)'].items():
             Stock_daily(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
     else:
-        x=Stock_daily.objects.filter(symbol=symbol.upper()).latest('date')
-        d=datetime.now()
-        d0 = date(x.date.year,x.date.month, x.date.day)
-        d1 = date(d.year,d.month, d.day)
-        delta = d1 - d0
+        stack={}
+        for data in response2:
+            stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
 
-        if delta.days>1:
-            data = {
-                "function": "TIME_SERIES_DAILY",
-                "symbol": symbol,
-                "outputsize": "compact", #compact for 100 quotes only
-                "apikey": "Q5I0WW1DQE5CBEQH",
-            }
+        data=stack
 
-            response = requests.get(API_URL, params=data).json()
-            data=response['Time Series (Daily)']
-            for key, val in response['Time Series (Daily)'].items():
-                d=datetime.strptime(key, "%Y-%m-%d").date()
-                d1 = date(d.year,d.month, d.day)
-                delta2 = d1 - d0
-                if delta2.days>0:
-                    Stock_daily(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
-                else:
-                    break
-        else:
-            stack={}
-            for data in response2:
-                stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
+    return JsonResponse(data)
 
-            data=stack
+def update_data(request):
+    response2 =Stock.objects.all()
+
+    for symbol in response2:
+        x=Stock_daily.objects.filter(symbol=symbol.symbol.upper()).exists()
+        if x:
+            x=Stock_daily.objects.filter(symbol=symbol.symbol.upper()).latest('date')
+            d=datetime.now()
+            d0 = date(x.date.year,x.date.month, x.date.day)
+            d1 = date(d.year,d.month, d.day)
+            delta = d1 - d0
+
+            if delta.days>1:
+                data = {
+                    "function": "TIME_SERIES_DAILY",
+                    "symbol": symbol,
+                    "outputsize": "compact", #compact for 100 quotes only
+                    "apikey": "Q5I0WW1DQE5CBEQH",
+                }
+
+                response = requests.get(API_URL, params=data).json()
+                data={'status':'Data updated'}
+                for key, val in response['Time Series (Daily)'].items():
+                    d=datetime.strptime(key, "%Y-%m-%d").date()
+                    d1 = date(d.year,d.month, d.day)
+                    delta2 = d1 - d0
+                    if delta2.days>0:
+                        Stock_daily(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
+                    else:
+                        break
+
+    data={'status':'Data up to date'}
+
 
     return JsonResponse(data)

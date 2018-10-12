@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Stock{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+      <p><button type="button" class="btn btn-primary" id="update">Update</button></p>
+      <p id="result"></p>
+    </div>
+
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $('#update').on('click', function(event) {
+    event.preventDefault(); // To prevent following the link (optional)
+
+    $.ajax({
+          url: "update_data/",
+          dataType: 'json',
+          data: {
+              'symbol': 'JO' // search term
+          },
+          success: function (data) {
+            $('#result').text(data.status);
+          }
+    });
+
+  });
+</script>
+
+{% endblock %}
