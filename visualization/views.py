@@ -11,8 +11,11 @@ API_URL = "https://www.alphavantage.co/query"
 def stock(request):
     return render(request, 'visualization/stock.html', {'date': datetime.now(), 'vue': 'stock'})
 
-def data(request):
-    return render(request, 'visualization/data.html', {'date': datetime.now(), 'vue': 'data'})
+def data_update(request):
+    return render(request, 'visualization/data_update.html', {'date': datetime.now(), 'vue': 'data'})
+
+def data_load(request):
+    return render(request, 'visualization/data_load.html', {'date': datetime.now(), 'vue': 'data'})
 
 def search_s(request):
     symbol = request.GET['symbol']
@@ -40,24 +43,11 @@ def return_s_data(request):
     symbol = request.GET['symbol']
     response2 =Stock_daily.objects.filter(symbol=symbol.upper()).order_by('symbol')
 
-    if not response2:
-        data = {
-            "function": "TIME_SERIES_DAILY",
-            "symbol": symbol,
-            "outputsize": "full", #compact for 100 quotes only
-            "apikey": "Q5I0WW1DQE5CBEQH",
-        }
+    stack={}
+    for data in response2:
+        stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
 
-        response = requests.get(API_URL, params=data).json()
-        data=response['Time Series (Daily)']
-        for key, val in response['Time Series (Daily)'].items():
-            Stock_daily(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
-    else:
-        stack={}
-        for data in response2:
-            stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
-
-        data=stack
+    data=stack
 
     return JsonResponse(data)
 
@@ -94,5 +84,27 @@ def update_data(request):
 
     data={'status':'Data up to date'}
 
+
+    return JsonResponse(data)
+
+def load_data(request):
+    response2 =Stock.objects.all()
+
+    for symbol in response2:
+        x=Stock_daily.objects.filter(symbol=symbol.symbol.upper()).exists()
+        if not x:
+            data = {
+                "function": "TIME_SERIES_DAILY",
+                "symbol": symbol,
+                "outputsize": "full", #compact for 100 quotes only
+                "apikey": "Q5I0WW1DQE5CBEQH",
+            }
+
+            response = requests.get(API_URL, params=data).json()
+            data=response['Time Series (Daily)']
+            for key, val in response['Time Series (Daily)'].items():
+                Stock_daily(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
+
+    data={'status':'Data loaded'}
 
     return JsonResponse(data)

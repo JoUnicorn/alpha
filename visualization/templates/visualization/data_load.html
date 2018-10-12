@@ -4,7 +4,8 @@
 {% block content %}
 
     <div class="container-fluid">
-      <p><button type="button" class="btn btn-primary" id="update">Update</button></p>
+      <h1> Load data </h1>
+      <p><button type="button" class="btn btn-primary" id="load">Load</button></p>
       <p id="result"></p>
     </div>
 
@@ -13,11 +14,11 @@
 
 {% block javascript %}
 <script>
-  $('#update').on('click', function(event) {
+  $('#load').on('click', function(event) {
     event.preventDefault(); // To prevent following the link (optional)
 
     $.ajax({
-          url: "update_data/",
+          url: "load_data/",
           dataType: 'json',
           data: {
               'symbol': 'JO' // search term
