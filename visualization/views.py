@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 import requests
 import json
 from django.http import JsonResponse
-from .models import Category_sector, Category_industry, Stock, Stock_daily
+from .models import Category_sector, Category_industry, Stock, Stock_daily, Stock_intraday_1min
 from django.core import serializers
 
 API_URL = "https://www.alphavantage.co/query"
@@ -39,13 +39,21 @@ def search_s(request):
 
     return JsonResponse(data)
 
-def return_s_data(request):
+def return_data(request):
+    interval = request.GET['interval']
     symbol = request.GET['symbol']
-    response2 =Stock_daily.objects.filter(symbol=symbol.upper()).order_by('symbol')
+    if interval == "daily":
+        response2 =Stock_daily.objects.filter(symbol=symbol.upper()).order_by('-date')
+        stack_open=[]
+        stack={}
+        for data in response2:
+            stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
+    if interval == "1min":
+        response2 =Stock_intraday_1min.objects.filter(symbol=symbol.upper()).order_by('-date')
+        stack={}
+        for data in response2:
+            stack[data.date.strftime("%Y-%m-%d %H:%M")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
 
-    stack={}
-    for data in response2:
-        stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
 
     data=stack
 
@@ -121,6 +129,47 @@ def load_data(request):
                 data=response['Time Series (Daily)']
                 for key, val in response['Time Series (Daily)'].items():
                     Stock_daily(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
+
+    data={'status':'Data loaded'}
+
+    return JsonResponse(data)
+
+def load_data2(request):
+    symbol = request.GET['symbol'].upper()
+    if symbol!="XXXX8888":
+        x=Stock_intraday_1min.objects.filter(symbol=symbol).exists()
+        if not x:
+            data = {
+                "function": "TIME_SERIES_INTRADAY",
+                "symbol": symbol,
+                "interval" : "1min",
+                "outputsize": "compact", #compact for 100 quotes only
+                "apikey": "Q5I0WW1DQE5CBEQH",
+            }
+
+            response = requests.get(API_URL, params=data).json()
+            data=response['Time Series (1min)']
+            for key, val in response['Time Series (1min)'].items():
+                Stock_intraday_1min(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
+
+    else:
+        response2 =Stock.objects.all()
+
+        for symbol in response2:
+            x=Stock_intraday_1min.objects.filter(symbol=symbol.symbol.upper()).exists()
+            if not x:
+                data = {
+                    "function": "TIME_SERIES_INTRADAY",
+                    "symbol": symbol,
+                    "interval" : "1min",
+                    "outputsize": "full", #compact for 100 quotes only
+                    "apikey": "Q5I0WW1DQE5CBEQH",
+                }
+
+                response = requests.get(API_URL, params=data).json()
+                data=response['Time Series (1min)']
+                for key, val in response['Time Series (1min)'].items():
+                    Stock_intraday_1min(date=key, symbol=symbol, open=val["1. open"], high=val["2. high"], low=val["3. low"], close= val["4. close"], volume=val["5. volume"]).save()
 
     data={'status':'Data loaded'}
 

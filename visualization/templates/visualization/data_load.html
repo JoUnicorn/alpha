@@ -7,7 +7,7 @@
       <h1> Load all data </h1>
       <p><button type="button" class="btn btn-primary" id="load">Load</button></p>
       <p id="result"></p>
-      <h1> Load 1 symbol </h1>
+      <h1> Load 1 symbol daily</h1>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <button class="btn btn-outline-secondary" type="button" id="load1">Add</button>
@@ -15,6 +15,14 @@
         <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" id="symbol">
       </div>
       <p id="result2"></p>
+      <h1> Load 1 symbol intraday 1 min</h1>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button class="btn btn-outline-secondary" type="button" id="load2">Add</button>
+        </div>
+        <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" id="symbol2">
+      </div>
+      <p id="result3"></p>
     </div>
 
 
@@ -24,6 +32,7 @@
 <script>
   $('#load').on('click', function(event) {
     event.preventDefault(); // To prevent following the link (optional)
+    $('#result').text("");
 
     $.ajax({
           url: "load_data/",
@@ -39,24 +48,45 @@
   });
 
   $('#load1').on('click', function(event) {
-    event.preventDefault(); // To prevent following the link (optional)
-    if($('#symbol').val() !=""){
-      $.ajax({
-            url: "load_data/",
-            dataType: 'json',
-            data: {
-                'symbol': $('#symbol').val() // search term
-            },
-            success: function (data) {
-              $('#result2').text(data.status);
-            }
-      });
+        event.preventDefault(); // To prevent following the link (optional)
+        $('#result2').text("");
+        if($('#symbol').val() !=""){
+          $.ajax({
+                url: "load_data/",
+                dataType: 'json',
+                data: {
+                    'symbol': $('#symbol').val() // search term
+                },
+                success: function (data) {
+                  $('#result2').text(data.status);
+                }
+          });
 
-    }else{
-      alert("input a symbol")
-    }
+        }else{
+          alert("input a symbol")
+        }
+    });
 
-  });
+    $('#load2').on('click', function(event) {
+      event.preventDefault(); // To prevent following the link (optional)
+      $('#result3').text("");
+      if($('#symbol2').val() !=""){
+        $.ajax({
+              url: "load_data2/",
+              dataType: 'json',
+              data: {
+                  'symbol': $('#symbol2').val() // search term
+              },
+              success: function (data) {
+                $('#result3').text(data.status);
+              }
+        });
+
+      }else{
+        alert("input a symbol")
+      }
+    });
+
 
 </script>
 

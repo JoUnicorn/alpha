@@ -5,17 +5,8 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-6">
-
-          <div class="input-group mb-3">
-              <select class="js-data-symbol-ajax" style="width:100%">
-              </select>
-
-              <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
-              </div>
-          </div>
-
-
+            <select class="js-data-symbol-ajax" style="width:100%" id="select_symbol">
+            </select>
         </div>
       </div>
     </div>
@@ -50,6 +41,17 @@
 
 {% block content_card_univariate_data %}
 
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+            <select class="js-data-symbol-ajax select_interval" style="width:100%">
+                <option value="daily">Daily</option>
+                <option value="1min">1 min</option>
+            </select>
+        </div>
+      </div>
+    </div>
+    <hr>
     <div class="container scrollV">
       <table id="data_symb">
           <thead>
@@ -77,6 +79,17 @@
 
 {% block content_card_univariate_chart %}
 
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+            <select class="js-data-symbol-ajax select_interval" style="width:100%">
+                <option value="daily">Daily</option>
+                <option value="1min">1 min</option>
+            </select>
+        </div>
+      </div>
+    </div>
+    <hr>
     <div class="container scrollV">
         <div id="main" style="width: 600px;height:400px;"></div>
     </div>
@@ -87,8 +100,12 @@
 {% block javascript %}
   <script>
     stock_list=[];
+    selected_symbol="";
     $(document).ready(function(){
-        $(".js-data-symbol-ajax").select2({
+        $(".select_interval").select2({
+            theme: "classic"
+        });
+        $("#select_symbol").select2({
             theme: "classic",
           ajax: {
             url: "search_s/",
@@ -144,15 +161,91 @@
           return repo['1. symbol'] || repo.text;
         }
 
-        $('.js-data-symbol-ajax').on('select2:select', function (e) {
+        $('.select_interval').on('select2:select', function (e) {
             var data_init = e.params.data;
+            selected_interval=data_init.id;
+            $('.select_interval').val(selected_interval);
+            $('.select_interval').trigger('change');
+            console.log(selected_interval);
             var xA=[];
             var yA=[];
             $("#data_symb tbody tr").remove();
             $.ajax({
-                  url: "return_s_data/",
+                  url: "return_data/",
                   dataType: 'json',
                   data: {
+                      'interval': selected_interval,
+                      'symbol': selected_symbol // search term
+                  },
+                  success: function (data) {
+                    $.each(data, function(index, element) {
+                          $('#data_symb > tbody').append('<tr></tr>');
+                          var appendRow = $('#data_symb tr:last');
+                          appendRow.append('<td>' + index + '</td>');
+                          xA.unshift(index);
+                          yA.unshift(element['1. open']);
+                          $.each(element, function(index2, element2) {
+                              appendRow.append('<td>' + element2 + '</td>');
+                          });
+                    });
+                    // based on prepared DOM, initialize echarts instance
+                    var myChart = echarts.init(document.getElementById('main'));
+
+                    // specify chart configuration item and data
+                    option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                animation: false
+                            }
+                        },
+                        axisPointer: {
+                            link: {xAxisIndex: 'all'}
+                        },
+                        dataZoom: [
+                            {
+                                id: 'dataZoomX',
+                               type: 'slider',
+                               filterMode: 'filter',
+                               start: 20,
+                               end: 80
+                            }
+                        ],
+                        xAxis: {
+                            type: 'category',
+                            data: xA
+                        },
+                        yAxis: {
+                            type: 'value',
+                            min: 'dataMin'
+                        },
+                        series: [{
+                            data: yA,
+                            type: 'line'
+                        }]
+                    };
+
+                    // use configuration item and data specified to show chart
+                    myChart.setOption(option)
+
+                  }
+                });
+
+        });
+
+        $('#select_symbol').on('select2:select', function (e) {
+            $('.select_interval').val("daily");
+            $('.select_interval').trigger('change');
+            var data_init = e.params.data;
+            selected_symbol=data_init['1. symbol'];
+            var xA=[];
+            var yA=[];
+            $("#data_symb tbody tr").remove();
+            $.ajax({
+                  url: "return_data/",
+                  dataType: 'json',
+                  data: {
+                      'interval': 'daily',
                       'symbol': data_init['1. symbol'] // search term
                   },
                   success: function (data) {
@@ -168,15 +261,19 @@
                         appendRow.append('<td>' + data_init['exchange'] + '</td>');
                         appendRow.append('<td>' + data_init['ipo'] + '</td>');
                         $('#info_symbol button').on('click', function(event) {
+                            $('.select_interval').val("daily");
+                            $('.select_interval').trigger('change');
                           event.preventDefault(); // To prevent following the link (optional)
+                          selected_symbol=this.id;
                           var xA=[];
                           var yA=[];
                           $("#data_symb tbody tr").remove();
                           $.ajax({
-                                url: "return_s_data/",
+                                url: "return_data/",
                                 dataType: 'json',
                                 data: {
-                                    'symbol': this.id // search term
+                                    'interval': 'daily',
+                                    'symbol': selected_symbol // search term
                                 },
                                 success: function (data) {
                                   $.each(data, function(index, element) {
