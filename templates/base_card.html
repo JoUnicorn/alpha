@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+{% block title %}Stock{% endblock %}
+
+{% block content %}
+
+    <div class="pb-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    {% with id="pills0" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Watchlists
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-2-tab" data-toggle="pill" href="#{{id}}-2" role="tab" aria-controls="{{id}}-2" aria-selected="false">
+                                    Alerts
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    {{date}}
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_watchlist %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-2" role="tabpanel" aria-labelledby="{{id}}-2-tab">
+                                  {% block content_card_alerts %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_date %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills1" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            Univariate
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Raw data
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-2-tab" data-toggle="pill" href="#{{id}}-2" role="tab" aria-controls="{{id}}-2" aria-selected="false">
+                                    Statistics
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_univariate_data %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-2" role="tabpanel" aria-labelledby="{{id}}-2-tab">
+                                  {% block content_card_univariate_stat %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_univariate_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills2" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            inter sector
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Company list
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-2-tab" data-toggle="pill" href="#{{id}}-2" role="tab" aria-controls="{{id}}-2" aria-selected="false">
+                                    Statistics
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_inter_sector_company %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-2" role="tabpanel" aria-labelledby="{{id}}-2-tab">
+                                  {% block content_card_inter_sector_stat %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_inter_sector_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills3" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            intra sector
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Sector list
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-2-tab" data-toggle="pill" href="#{{id}}-2" role="tab" aria-controls="{{id}}-2" aria-selected="false">
+                                    Statistics
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_intra_sector_company %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-2" role="tabpanel" aria-labelledby="{{id}}-2-tab">
+                                  {% block content_card_intra_sector_stat %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_intra_sector_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills4" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            inter industry
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Company list
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-2-tab" data-toggle="pill" href="#{{id}}-2" role="tab" aria-controls="{{id}}-2" aria-selected="false">
+                                    Statistics
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_inter_industry_company %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-2" role="tabpanel" aria-labelledby="{{id}}-2-tab">
+                                  {% block content_card_inter_industry_stat %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_inter_industry_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills5" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            intra industry
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Sector list
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-2-tab" data-toggle="pill" href="#{{id}}-2" role="tab" aria-controls="{{id}}-2" aria-selected="false">
+                                    Statistics
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_intra_industry_company %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-2" role="tabpanel" aria-labelledby="{{id}}-2-tab">
+                                  {% block content_card_intra_industry_stat %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_intra_industry_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills5" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            Strategy builder
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Parameter
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_strategy_parameter %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_strategy_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                <div class="col-lg-6">
+                    {% with id="pills5" %}
+                    <div class="card border-9 mt-5">
+                        <h5 class="card-header" style="background-color:#DCDCDC;">
+                            P&L
+                            <ul class="nav nav-pills card-header-pills" id="{{id}}-tab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="{{id}}-1-tab" data-toggle="pill" href="#{{id}}-1" role="tab" aria-controls="{{id}}-1" aria-selected="true">
+                                    Results
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="{{id}}-3-tab" data-toggle="pill" href="#{{id}}-3" role="tab" aria-controls="{{id}}-3" aria-selected="false">
+                                    Charts
+                                </a>
+                              </li>
+                            </ul>
+                        </h5>
+                        <div class="card-body">
+                            <div class="tab-content" id="{{id}}-tabContent">
+                              <div class="tab-pane fade show active" id="{{id}}-1" role="tabpanel" aria-labelledby="{{id}}-1-tab">
+                                  {% block content_card_pnl_results %}{% endblock %}
+                              </div>
+                              <div class="tab-pane fade" id="{{id}}-3" role="tabpanel" aria-labelledby="{{id}}-3-tab">
+                                  {% block content_card_pnl_chart %}{% endblock %}
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

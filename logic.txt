@@ -1,0 +1,5 @@
+we have:
+1) display module: css/bootstrap modue => in the template
+2) chart/table: js plugin
+3) stat/model: python backend
+4) layout: bootstrap main page => in the app template

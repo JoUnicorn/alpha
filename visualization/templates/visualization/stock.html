@@ -1,189 +1,88 @@
-{% extends "base.html" %}
-{% block title %}Stock{% endblock %}
+{% extends "base_card.html" %}
 
-{% block content %}
+{% block content_card_watchlist %}
 
-    <div class="pb-5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card border-9 mt-5">
-                        <h5 class="card-header" style="background-color:#DCDCDC;">
-                            <ul class="nav nav-pills card-header-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" href="#">Watchlists</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Alerts</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">{{date}}</a>
-                              </li>
-                            </ul>
-                        </h5>
-                        <div class="card-body">
-                          <div class="container">
-                            <div class="row">
-                              <div class="col-sm-6">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
 
-                                <div class="input-group mb-3">
-                                    <select class="js-data-symbol-ajax" style="width:100%">
-                                    </select>
+          <div class="input-group mb-3">
+              <select class="js-data-symbol-ajax" style="width:100%">
+              </select>
 
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
-                                    </div>
-                                </div>
+              <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add</button>
+              </div>
+          </div>
 
 
-                              </div>
-                            </div>
-                          </div>
-                          <hr>
-                          <div class="container scrollV">
-                            <table id="info_symbol">
-                                <tr>
-                                    <th>Symbol</th>
-                                    <th>Name</th>
-                                    <th>Sector</th>
-                                    <th>Industry</th>
-                                    <th>Exchange</th>
-                                    <th>Ipo year</th>
-                                </tr>
-
-                            </table>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card border-9 mt-5">
-                        <h5 class="card-header" style="background-color:#DCDCDC;">
-                            <ul class="nav nav-pills card-header-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" href="#">Overview</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Statistics</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Charts</a>
-                              </li>
-                            </ul>
-                        </h5>
-                        <div class="card-body">
-                            <div class="container scrollV">
-                              <table id="data_symb">
-                                  <thead>
-                                      <tr>
-                                          <th>date</th>
-                                          <th>open</th>
-                                          <th>high</th>
-                                          <th>low</th>
-                                          <th>close</th>
-                                          <th>volume</th>
-                                      </tr>
-                                  </thead>
-                                    <tbody>
-                                    </tbody>
-                              </table>
-                            </div>
-                            <hr>
-                            <div class="container scrollV">
-
-                                <div id="main" style="width: 600px;height:400px;"></div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card border-9 mt-5">
-                        <h5 class="card-header" style="background-color:#DCDCDC;">
-                            <ul class="nav nav-pills card-header-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" href="#">Intra industry</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Statistics</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Charts</a>
-                              </li>
-                            </ul>
-                        </h5>
-                        <div class="card-body">
-                          <div class="container">
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card border-9 mt-5">
-                        <h5 class="card-header" style="background-color:#DCDCDC;">
-                            <ul class="nav nav-pills card-header-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" href="#">Inter industry</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Statistics</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Charts</a>
-                              </li>
-                            </ul>
-                        </h5>
-                        <div class="card-body">
-                          <div class="container">
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card border-9 mt-5">
-                        <h5 class="card-header" style="background-color:#DCDCDC;">
-                            <ul class="nav nav-pills card-header-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" href="#">Strategy builder</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Parameter</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Charts</a>
-                              </li>
-                            </ul>
-                        </h5>
-                        <div class="card-body">
-                          <div class="container">
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card border-9 mt-5">
-                        <h5 class="card-header" style="background-color:#DCDCDC;">
-                            <ul class="nav nav-pills card-header-pills">
-                              <li class="nav-item">
-                                <a class="nav-link active" href="#">P&L</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" href="#">Run</a>
-                              </li>
-                            </ul>
-                        </h5>
-                        <div class="card-body">
-                          <div class="container">
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container scrollV">
+      <table id="info_symbol">
+          <tr>
+              <th>Symbol</th>
+              <th>Name</th>
+              <th>Sector</th>
+              <th>Industry</th>
+              <th>Exchange</th>
+              <th>Ipo year</th>
+          </tr>
+
+      </table>
     </div>
 
+{% endblock %}
+
+{% block content_card_alerts %}
+
+    <p>to be build</p>
 
 {% endblock %}
+
+{% block content_card_date %}
+
+    <p>to be build</p>
+
+{% endblock %}
+
+{% block content_card_univariate_data %}
+
+    <div class="container scrollV">
+      <table id="data_symb">
+          <thead>
+              <tr>
+                  <th>date</th>
+                  <th>open</th>
+                  <th>high</th>
+                  <th>low</th>
+                  <th>close</th>
+                  <th>volume</th>
+              </tr>
+          </thead>
+            <tbody>
+            </tbody>
+      </table>
+    </div>
+
+{% endblock %}
+
+{% block content_card_univariate_stat %}
+
+    <p>to be build</p>
+
+{% endblock %}
+
+{% block content_card_univariate_chart %}
+
+    <div class="container scrollV">
+        <div id="main" style="width: 600px;height:400px;"></div>
+    </div>
+
+{% endblock %}
+
 
 {% block javascript %}
   <script>
