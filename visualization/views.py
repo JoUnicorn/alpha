@@ -5,6 +5,7 @@ import json
 from django.http import JsonResponse
 from .models import Category_sector, Category_industry, Stock, Stock_daily, Stock_intraday_1min
 from django.core import serializers
+import statistics
 
 API_URL = "https://www.alphavantage.co/query"
 
@@ -42,20 +43,40 @@ def search_s(request):
 def return_data(request):
     interval = request.GET['interval']
     symbol = request.GET['symbol']
+    sector=request.GET['sector']
+    industry=request.GET['industry']
+    company_list_sector=[]
+    company_list_industry=[]
+    response2 =Stock.objects.filter(category_sector__sector=sector)
+    for data in response2:
+        company_list_sector.append({'symbol':data.symbol, 'company': data.company})
+    response2 =Stock.objects.filter(category_industry__industry=industry)
+    for data in response2:
+        company_list_industry.append({'symbol':data.symbol, 'company': data.company})
+    stack_open=[]
+    stack={}
     if interval == "daily":
         response2 =Stock_daily.objects.filter(symbol=symbol.upper()).order_by('-date')
-        stack_open=[]
-        stack={}
         for data in response2:
+            stack_open.append(data.open)
             stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
     if interval == "1min":
         response2 =Stock_intraday_1min.objects.filter(symbol=symbol.upper()).order_by('-date')
-        stack={}
         for data in response2:
+            stack_open.append(data.open)
             stack[data.date.strftime("%Y-%m-%d %H:%M")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
 
-
-    data=stack
+    mean_open=statistics.mean(stack_open)
+    std_open=statistics.stdev(stack_open)
+    data={
+        'company_list_industry':company_list_industry,
+        'company_list_sector':company_list_sector,
+        'sector':sector,
+        'industry':industry,
+        'mean':mean_open,
+        'std':std_open,
+        'data':stack
+    }
 
     return JsonResponse(data)
 

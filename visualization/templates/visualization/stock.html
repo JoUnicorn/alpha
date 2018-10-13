@@ -73,7 +73,30 @@
 
 {% block content_card_univariate_stat %}
 
-    <p>to be build</p>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+            <select class="js-data-symbol-ajax select_interval" style="width:100%">
+                <option value="daily">Daily</option>
+                <option value="1min">1 min</option>
+            </select>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="container scrollV">
+      <table id="stat_symbol">
+          <thead>
+              <tr>
+                  <th>Statistics</th>
+                  <th>Open</th>
+              </tr>
+          </thead>
+            <tbody>
+            </tbody>
+      </table>
+
+    </div>
 
 {% endblock %}
 
@@ -96,6 +119,49 @@
 
 {% endblock %}
 
+{% block content_card_inter_sector_company %}
+
+<div class="container">
+<p> <span id="number_company_sector"></span> companies </p>
+</div>
+<hr>
+<div class="container scrollV">
+  <table id="inter_sector_company">
+      <thead>
+          <tr>
+              <th>Symbol</th>
+              <th>Company name</th>
+          </tr>
+      </thead>
+        <tbody>
+        </tbody>
+  </table>
+
+</div>
+
+{% endblock %}
+
+{% block content_card_inter_industry_company %}
+
+<div class="container">
+<p> <span id="number_company_industry"></span> companies </p>
+</div>
+<hr>
+<div class="container scrollV">
+  <table id="inter_industry_company">
+      <thead>
+          <tr>
+              <th>Symbol</th>
+              <th>Company name</th>
+          </tr>
+      </thead>
+        <tbody>
+        </tbody>
+  </table>
+
+</div>
+
+{% endblock %}
 
 {% block javascript %}
   <script>
@@ -166,19 +232,29 @@
             selected_interval=data_init.id;
             $('.select_interval').val(selected_interval);
             $('.select_interval').trigger('change');
-            console.log(selected_interval);
             var xA=[];
             var yA=[];
             $("#data_symb tbody tr").remove();
+            $("#stat_symbol tbody tr").remove();
             $.ajax({
                   url: "return_data/",
                   dataType: 'json',
                   data: {
+                      'sector': "",
+                      'industry': "",
                       'interval': selected_interval,
                       'symbol': selected_symbol // search term
                   },
                   success: function (data) {
-                    $.each(data, function(index, element) {
+                      $('#stat_symbol > tbody').append('<tr></tr>');
+                      var appendRow = $('#stat_symbol tr:last');
+                      appendRow.append('<td>Mean</td>');
+                      appendRow.append('<td>' + data.mean + '</td>');
+                      $('#stat_symbol > tbody').append('<tr></tr>');
+                      var appendRow = $('#stat_symbol tr:last');
+                      appendRow.append('<td>Standard deviation</td>');
+                      appendRow.append('<td>' + data.std + '</td>');
+                    $.each(data.data, function(index, element) {
                           $('#data_symb > tbody').append('<tr></tr>');
                           var appendRow = $('#data_symb tr:last');
                           appendRow.append('<td>' + index + '</td>');
@@ -241,10 +317,13 @@
             var xA=[];
             var yA=[];
             $("#data_symb tbody tr").remove();
+            $("#stat_symbol tbody tr").remove();
             $.ajax({
                   url: "return_data/",
                   dataType: 'json',
                   data: {
+                      'sector': data_init['sector'],
+                      'industry': data_init['industry'],
                       'interval': 'daily',
                       'symbol': data_init['1. symbol'] // search term
                   },
@@ -268,15 +347,26 @@
                           var xA=[];
                           var yA=[];
                           $("#data_symb tbody tr").remove();
+                          $("#stat_symbol tbody tr").remove();
                           $.ajax({
                                 url: "return_data/",
                                 dataType: 'json',
                                 data: {
+                                    'sector': data_init['sector'],
+                                    'industry': data_init['industry'],
                                     'interval': 'daily',
                                     'symbol': selected_symbol // search term
                                 },
                                 success: function (data) {
-                                  $.each(data, function(index, element) {
+                                    $('#stat_symbol > tbody').append('<tr></tr>');
+                                    var appendRow = $('#stat_symbol tr:last');
+                                    appendRow.append('<td>Mean</td>');
+                                    appendRow.append('<td>' + data.mean + '</td>');
+                                    $('#stat_symbol > tbody').append('<tr></tr>');
+                                    var appendRow = $('#stat_symbol tr:last');
+                                    appendRow.append('<td>Standard deviation</td>');
+                                    appendRow.append('<td>' + data.std + '</td>');
+                                  $.each(data.data, function(index, element) {
                                         $('#data_symb > tbody').append('<tr></tr>');
                                         var appendRow = $('#data_symb tr:last');
                                         appendRow.append('<td>' + index + '</td>');
@@ -286,6 +376,26 @@
                                             appendRow.append('<td>' + element2 + '</td>');
                                         });
                                   });
+                                  ite=0;
+                                  $.each(data.company_list_sector, function(index, element) {
+                                      ite++;
+                                        $('#inter_sector_company > tbody').append('<tr></tr>');
+                                        var appendRow = $('#inter_sector_company tr:last');
+                                        $.each(element, function(index2, element2) {
+                                            appendRow.append('<td>' + element2 + '</td>');
+                                        });
+                                  });
+                                  $('#number_company_sector').text(ite);
+                                  ite=0;
+                                  $.each(data.company_list_industry, function(index, element) {
+                                      ite++;
+                                        $('#inter_industry_company > tbody').append('<tr></tr>');
+                                        var appendRow = $('#inter_industry_company tr:last');
+                                        $.each(element, function(index2, element2) {
+                                            appendRow.append('<td>' + element2 + '</td>');
+                                        });
+                                  });
+                                  $('#number_company_industry').text(ite);
                                   // based on prepared DOM, initialize echarts instance
                                   var myChart = echarts.init(document.getElementById('main'));
 
@@ -330,7 +440,15 @@
                               });
                         });
                       }
-                      $.each(data, function(index, element) {
+                      $('#stat_symbol > tbody').append('<tr></tr>');
+                      var appendRow = $('#stat_symbol tr:last');
+                      appendRow.append('<td>Mean</td>');
+                      appendRow.append('<td>' + data.mean + '</td>');
+                      $('#stat_symbol > tbody').append('<tr></tr>');
+                      var appendRow = $('#stat_symbol tr:last');
+                      appendRow.append('<td>Standard deviation</td>');
+                      appendRow.append('<td>' + data.std + '</td>');
+                      $.each(data.data, function(index, element) {
                             $('#data_symb > tbody').append('<tr></tr>');
                             var appendRow = $('#data_symb tr:last');
                             appendRow.append('<td>' + index + '</td>');
@@ -340,6 +458,26 @@
                                 appendRow.append('<td>' + element2 + '</td>');
                             });
                       });
+                      ite=0;
+                      $.each(data.company_list_sector, function(index, element) {
+                          ite++;
+                            $('#inter_sector_company > tbody').append('<tr></tr>');
+                            var appendRow = $('#inter_sector_company tr:last');
+                            $.each(element, function(index2, element2) {
+                                appendRow.append('<td>' + element2 + '</td>');
+                            });
+                      });
+                      $('#number_company_sector').text(ite);
+                      ite=0;
+                      $.each(data.company_list_industry, function(index, element) {
+                          ite++;
+                            $('#inter_industry_company > tbody').append('<tr></tr>');
+                            var appendRow = $('#inter_industry_company tr:last');
+                            $.each(element, function(index2, element2) {
+                                appendRow.append('<td>' + element2 + '</td>');
+                            });
+                      });
+                      $('#number_company_industry').text(ite);
                       // based on prepared DOM, initialize echarts instance
                       var myChart = echarts.init(document.getElementById('main'));
 
