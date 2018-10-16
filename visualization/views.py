@@ -6,6 +6,9 @@ from django.http import JsonResponse
 from .models import Category_sector, Category_industry, Stock, Stock_daily, Stock_intraday_1min
 from django.core import serializers
 import statistics
+from scipy import stats
+import numpy as np
+from scipy.ndimage.interpolation import shift
 
 API_URL = "https://www.alphavantage.co/query"
 
@@ -54,17 +57,35 @@ def return_data(request):
     for data in response2:
         company_list_industry.append({'symbol':data.symbol, 'company': data.company})
     stack_open=[]
+
+    stack_open2=[]
+
+
     stack={}
     if interval == "daily":
         response2 =Stock_daily.objects.filter(symbol=symbol.upper()).order_by('-date')
         for data in response2:
             stack_open.append(data.open)
             stack[data.date.strftime("%Y-%m-%d")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
+
+
+        response2 =Stock_daily.objects.filter(symbol="DBX").order_by('-date')
+        for data in response2:
+            stack_open2.append(data.open)
+
+
+
     if interval == "1min":
         response2 =Stock_intraday_1min.objects.filter(symbol=symbol.upper()).order_by('-date')
         for data in response2:
             stack_open.append(data.open)
             stack[data.date.strftime("%Y-%m-%d %H:%M")]={'1. open':data.open, '2. high':data.high, '3. low':data.low, '4. close':data.close, '5. volume':data.volume}
+
+    xs2=shift(stack_open2, 1, cval=0)
+    print (stack_open)
+    print (xs2)
+    pears=stats.pearsonr(stack_open,xs2)
+    print(pears)
 
     mean_open=statistics.mean(stack_open)
     std_open=statistics.stdev(stack_open)
